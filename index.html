@@ -1,91 +1,142 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>AccessMap - Chandigarh University</title>
+  <meta charset="utf-8" />
+  <title>AccessMap – Chandigarh University</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet CSS -->
+  <link 
+    rel="stylesheet" 
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
 
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-  }
-  #map {
-    width: 100%;
-    height: 100vh;
-  }
-</style>
+  <!-- Leaflet JS -->
+  <script 
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      height: 100vh;
+      width: 100vw;
+    }
+
+    button {
+      background: #4a90e2;
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #3575c4;
+    }
+  </style>
 </head>
 
 <body>
-<div id="map"></div>
+  <div id="map"></div>
 
-<script>
-// Initialize map centered around CU
-var map = L.map('map').setView([30.7705, 76.5743], 16);
+  <script>
+    // Load map centered on Chandigarh University
+    const map = L.map('map').setView([30.7705, 76.5755], 16);
 
-// Add free OpenStreetMap tiles
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19,
-  attribution: '© OpenStreetMap'
-}).addTo(map);
+    // Tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 20,
+    }).addTo(map);
 
-// Custom colored marker icons
-function markerIcon(color) {
-  return new L.Icon({
-    iconUrl: `https://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -30]
-  });
-}
+    // Custom color marker icons
+    const redIcon = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34]
+    });
 
-// Locations
-var locations = [
-  {
-    name: "Tagore Hostel",
-    coords: [30.765906239361716, 76.57575510908525],
-    color: "red",
-    url: "#"
-  },
-  {
-    name: "Corner Cafe",
-    coords: [30.769238479094543, 76.57624382257845],
-    color: "red",
-    url: "#"
-  },
-  {
-    name: "Shivalik Girls Hostel",
-    coords: [30.771209861147867, 76.56890156675671],
-    color: "green",
-    url: "#"
-  },
-  {
-    name: "C3 Academic Block",
-    coords: [30.77400808417701, 76.57497051724792],
-    color: "green",
-    url: "#"
-  },
-  {
-    name: "C2 Academic Block",
-    coords: [30.770416183061137, 76.57600023888216],
-    color: "orange",
-    url: "#"
-  }
-];
+    const greenIcon = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34]
+    });
 
-// Add markers
-locations.forEach(loc => {
-  var marker = L.marker(loc.coords, { icon: markerIcon(loc.color) })
-    .addTo(map)
-    .bindPopup(`<b>${loc.name}</b><br><a href="${loc.url}" target="_blank">Open details</a>`);
-});
-</script>
+    const orangeIcon = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34]
+    });
 
+    // Jotform page URLs
+    const urlAccessible = "https://www.jotform.com/app/253095306439460?p=fully-accessible";
+    const urlPartiallyAccessible = "https://www.jotform.com/app/253095306439460?p=partially-accessible";
+    const urlNotAccessible = "https://www.jotform.com/app/253095306439460?p=not-accessible";
+
+    // --- MARKERS WITH POPUPS ---
+
+    // Tagore Hostel - RED
+    L.marker([30.765906239361716, 76.57575510908525], { icon: redIcon })
+      .addTo(map)
+      .bindPopup(`
+        <b>Tagore Hostel</b><br>
+        Not Accessible<br><br>
+        <button onclick="window.location.href='${urlNotAccessible}'">
+          Open Details
+        </button>
+      `);
+
+    // Corner Cafe - RED
+    L.marker([30.769238479094543, 76.57624382257845], { icon: redIcon })
+      .addTo(map)
+      .bindPopup(`
+        <b>Corner Cafe</b><br>
+        Not Accessible<br><br>
+        <button onclick="window.location.href='${urlNotAccessible}'">
+          Open Details
+        </button>
+      `);
+
+    // Shivalik Girls Hostel - GREEN
+    L.marker([30.771209861147867, 76.56890156675671], { icon: greenIcon })
+      .addTo(map)
+      .bindPopup(`
+        <b>Shivalik Girls Hostel</b><br>
+        Fully Accessible<br><br>
+        <button onclick="window.location.href='${urlAccessible}'">
+          Open Details
+        </button>
+      `);
+
+    // C3 Academic Block - GREEN
+    L.marker([30.767119086681998, 76.57475709265488], { icon: greenIcon })
+      .addTo(map)
+      .bindPopup(`
+        <b>C3 Academic Block</b><br>
+        Fully Accessible<br><br>
+        <button onclick="window.location.href='${urlAccessible}'">
+          Open Details
+        </button>
+      `);
+
+    // C2 Academic Block - ORANGE
+    L.marker([30.76617818232056, 76.57602969559225], { icon: orangeIcon })
+      .addTo(map)
+      .bindPopup(`
+        <b>C2 Academic Block</b><br>
+        Partially Accessible<br><br>
+        <button onclick="window.location.href='${urlPartiallyAccessible}'">
+          Open Details
+        </button>
+      `);
+  </script>
 </body>
 </html>
